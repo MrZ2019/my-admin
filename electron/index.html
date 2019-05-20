@@ -19,9 +19,10 @@ video {
 
 
 <iframe src="http://localhost:9527" frameborder="0"></iframe>
-
+<script src="./utils.js"></script>
 <script>
     window._require = require
+    window.frame1 = window.frames[0]
     window.addEventListener('message', function(e) {
         try {
             eval(e.data)

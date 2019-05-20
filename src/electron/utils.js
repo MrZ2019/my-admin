@@ -1,5 +1,3 @@
-
-
 window.COMMANDS = {
 
 }
@@ -11,8 +9,7 @@ let isConnected = true
 window.execute = function (command, params, success) {
 
     try {
-        let str = `var ${command} = ` + COMMANDS[command].toString() + ` ;${command}()`
-
+        let str = `var params = ${JSON.stringify(params)};var ${command} = ` + COMMANDS[command].toString() + ` ;${command}(params)`
         var parent = isConnected ? window.parent : window;
 
         parent.postMessage(str, '*')
@@ -37,8 +34,8 @@ window.addEventListener('message', function (e) {
         //       $Mp3List.list = list.slice(0,50) 
         //   } 
         let callback = window.ElectronCallbacks[set.type]
-        callback && calllback.call()
+        callback && callback.call(null, set.data)
     } catch (e) {
         alert(e)
     }
-})
+}) 
