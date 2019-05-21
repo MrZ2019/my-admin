@@ -11,26 +11,28 @@
 
 <template>
   <div class="content">
-
+      
       <div>
           <el-button>浏览</el-button>
           <el-button>播放</el-button>
       </div>
-    <div class="file-box">
+    <div class="file-box" v-show="curView == 'list'">
       <el-table :data="tableData" style="width:100%" @row-dblclick="handleDoubleClick">
         <el-table-column prop="name" label="文件名"></el-table-column>
         <el-table-column prop="type" label="类型"></el-table-column>
       </el-table>
     </div>
 
-    <div class="play-box"></div>
+    <div class="play-box"  v-show="curView == 'play'">
+      <video src="curPlaySrc" controls></video>
+    </div>
   </div>
 </template>
 
 <script>
 let self;
 
-let path = "E:\\Video\\mv\\"
+let path = "D:\\CloudMusic\\MV\\"
 
 
 export default {
@@ -41,8 +43,12 @@ export default {
   },
   data() {
     return {
+      curView: 'list',
       tableData: [],
-      curFolder: ""
+      curFolder: "",
+
+
+      curPlaySrc: "",
     };
   },
   methods: {
@@ -58,7 +64,13 @@ export default {
         //   debugger
         let elm = $(e.currentTarget)
         
-        self.scan(self.curFolder + row.name + "\\")
+        if (row) {
+          self.curPlaySrc = row.filepath
+          self.curView = "play"
+        }else {
+
+          self.scan(self.curFolder + row.name + "\\")
+        }
       }
   },
   commands: {
@@ -71,11 +83,17 @@ export default {
         for (let index = 0; index < list.length; index++) {
           const element = list[index];
           console.log(element)
-            debugger
-          let type = window.stat.isFile(options.path + element) ? "文件": "目录"
+
+          let filepath = options.path + element
+          let info = fs.statSync(filepath)
+          // debugger
+          let type = info.isFile()
+          let typeName = info.isFile() ? "文件": "目录"
           let newItem = {
             name: element,
-            type: type
+            filepath: filepath,
+            type: type,
+            typeName: typeName,
           };
 
           newList.push(newItem);
