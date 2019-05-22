@@ -1,5 +1,8 @@
 
-echo run
-e:
+
+d:
 cd D:\code\git\my-admin\electron
-electron main.js
+start cmd /k electron main.js
+
+cd D:
+http-server -p 6001
