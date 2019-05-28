@@ -47,15 +47,13 @@
 let self;
 
 
-let path = "D:\\CloudMusic\\MV\\"
-
 import config from "./config"
 
 export default {
 
   mounted() {
     self = this;
-    self.scan(path)
+    self.scan(config.folder)
 
     self.curView = window.metadata2.curView || self.curView
     self.curPlaySrc = window.metadata2.curPlaySrc || self.curPlaySrc
@@ -106,7 +104,7 @@ export default {
           }
           self.curPlaySrc = config.protocal + src
           window.metadata2.curPlaySrc = self.curPlaySrc
-          self.changeView("play ")
+          self.changeView("play")
         }else {
 
           self.scan(self.curFolder + row.name + "\\")
