@@ -61,7 +61,6 @@
 let self;
 
 let timer
-let path = "D:\\CloudMusic\\MV\\"
 
 import config from "./config"
 import {listenEle} from './utils'
@@ -70,7 +69,7 @@ export default {
   mounted() {
     self = this;
     window.p = self
-    self.scan(path)
+    self.scan(config.folder)
 
     self.curView = window.metadata2.curView || self.curView
     self.curPlaySrc = window.metadata2.curPlaySrc || self.curPlaySrc
@@ -106,7 +105,27 @@ export default {
     };
   },
   methods: {
-    onTimerRecord
+    onTimerRecord() {
+          // console.log(myVideo.currentTime)
+
+          let newRecord = {
+            name:  self.curRow.name,
+            filepath:  self.curRow.filepath,
+            folder:  self.curRow.folder,
+            position: parseInt(myVideo.currentTime),
+            date: today,
+            percentage: parseInt(myVideo.currentTime / myVideo.duration * 100),
+          }
+
+          let index = _.findIndex(todayHistory, {filepath: self.curRow.filepath})
+
+          if (index != -1) {
+            todayHistory.splice(index, 1)
+          }
+          todayHistory.unshift(newRecord)
+
+          self.generateHistoryData()
+    },
     generateHistoryData() {
       let list = []
       let dates = []
@@ -137,7 +156,7 @@ export default {
         if (timer) {
           clearInterval(timer)
         }
-        timer = setInterval(onTimerRecord, 1000)
+        timer = setInterval(self.onTimerRecord, 1000)
       },
       stopTimer() {
         clearInterval(timer)
