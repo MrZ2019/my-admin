@@ -28,7 +28,9 @@
           <el-button @click="changeView('list')"
           :type="curView == 'list' ? 'success' : '' ">浏览</el-button>
           <el-button @click="changeView('play')"
-          :type="curView != 'list' ? 'success' : '' ">播放</el-button>
+          :type="curView == 'play' ? 'success' : '' ">播放</el-button>
+          <el-button @click="changeView('history')"
+          :type="curView == 'history' ? 'success' : '' ">历史</el-button>
       </div>
     <div class="file-box" v-show="curView == 'list'">
       <el-table :data="tableData" style="width:100%" @row-dblclick="handleDoubleClick">
@@ -40,37 +42,106 @@
     <div class="play-box"  v-show="curView == 'play'">
       <video :src="curPlaySrc" controls ref="myVideo"></video>
     </div>
+    <div class="history-box"  v-show="curView == 'history'">
+      <el-table :data="historyData" style="width:100%" @row-dblclick="handleDoubleClick">
+        <el-table-column prop="name" label="文件名"></el-table-column>
+        <el-table-column prop="date" label="日期"></el-table-column>
+        <el-table-column label="进度">
+          <template slot-scope="scope">
+            <el-progress :text-inside="true" :stroke-width="18" :percentage="scope.row.percentage"></el-progress>
+          </template>
+        </el-table-column>
+      </el-table>      
+    </div>
+
   </div>
 </template>
 
 <script>
 let self;
 
-
+let timer
 let path = "D:\\CloudMusic\\MV\\"
 
 import config from "./config"
-
+import {listenEle} from './utils'
 export default {
 
   mounted() {
     self = this;
+    window.p = self
     self.scan(path)
 
     self.curView = window.metadata2.curView || self.curView
     self.curPlaySrc = window.metadata2.curPlaySrc || self.curPlaySrc
+    self.curRow = window.metadata2.curRow || self.curRow
+    self.historyData = window.metadata2.historyData || self.historyData
+
+
+    //
+
+    for (const key in self.$refs) {
+      window[key] = self.$refs[key]
+    }
+
+    listenEle(myVideo, {
+      play: ()=> {
+        self.startTimer()
+      },
+      pause: ()=> {
+        self.stopTimer()
+      }
+    })
   },
   data() {
     return {
       curView: 'list',  
       tableData: [],
       curFolder: "",
+      curRow: "",
 
 
       curPlaySrc: "",
+      historyData: []
     };
   },
   methods: {
+    onTimerRecord
+    generateHistoryData() {
+      let list = []
+      let dates = []
+      for (const key in PlayHistory) {
+        if (PlayHistory.hasOwnProperty(key)) {
+          const day = PlayHistory[key];
+          
+          dates.push(key)
+        }
+      }
+
+      dates.sort(function(a,b) {
+        return a > b
+      })
+
+      for (let index = 0; index < dates.length; index++) {
+        const element = dates[index];
+        
+        list = list.concat(PlayHistory[element])
+      }
+
+      self.historyData = JSON.parse(JSON.stringify(list))
+
+      window.metadata2.historyData = self.historyData
+    },
+      startTimer() {
+
+        if (timer) {
+          clearInterval(timer)
+        }
+        timer = setInterval(onTimerRecord, 1000)
+      },
+      stopTimer() {
+        clearInterval(timer)
+      },
       changeView(mode) {
         self.curView = mode
 
@@ -93,6 +164,9 @@ export default {
         let elm = $(e.currentTarget)
         
         if (row) {
+
+          self.curRow = row
+          window.metadata2.curRow = row
           let src = row.filepath
 
 
@@ -106,7 +180,7 @@ export default {
           }
           self.curPlaySrc = config.protocal + src
           window.metadata2.curPlaySrc = self.curPlaySrc
-          self.changeView("play ")
+          self.changeView("play")
         }else {
 
           self.scan(self.curFolder + row.name + "\\")

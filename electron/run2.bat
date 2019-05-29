@@ -2,7 +2,13 @@
 
 d:
 cd D:\code\git\my-admin\electron
+
+
+
+start cmd /k npm run dev
+
+cd D:\code\git\my-admin
 start cmd /k electron main.js
 
-cd D:
+cd /
 http-server -p 6001

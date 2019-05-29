@@ -31,6 +31,7 @@ Vue.use(Element, {
 import './electron/utils'
 import mixin from "./mixins"
 
+
 Vue.mixin(mixin)
 
 // register global utility filters.
