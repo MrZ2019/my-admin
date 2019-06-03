@@ -74,7 +74,20 @@ export default {
     self.curView = window.metadata2.curView || self.curView
     self.curPlaySrc = window.metadata2.curPlaySrc || self.curPlaySrc
     self.curRow = window.metadata2.curRow || self.curRow
-    self.historyData = window.metadata2.historyData || self.historyData
+
+    var str = localStorage.getItem(config.appKey + 'PlayHistory')
+
+    if (str) {
+
+      window.PlayHistory = JSON.parse(str) || self.PlayHistory
+
+      self.generateHistoryData()
+    }
+
+    
+    window.today = moment().format("YYYY-MM-DD")
+
+    window.todayHistory = window.PlayHistory[today] || []
 
 
     //
@@ -148,6 +161,8 @@ export default {
       }
 
       self.historyData = JSON.parse(JSON.stringify(list))
+
+      localStorage.setItem(config.appKey + 'PlayHistory', JSON.stringify(window.PlayHistory))
 
       window.metadata2.historyData = self.historyData
     },

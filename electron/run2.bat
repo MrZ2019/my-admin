@@ -1,13 +1,13 @@
 
 
 d:
-cd D:\code\git\my-admin\electron
+cd D:\code\git\my-admin\
 
 
 
 start cmd /k npm run dev
 
-cd D:\code\git\my-admin
+cd D:\code\git\my-admin\electron
 start cmd /k electron main.js
 
 cd /

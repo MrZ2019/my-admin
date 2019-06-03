@@ -2,8 +2,12 @@
 var env = 'MSI'
 var env = 'HEHUI'
 
+var def = {
+  protocal: "http://",
+  appKey: 'mars-'
+}
+
 let MSI = {
-    protocal: 'http://',
     maps: {
         "D:": "localhost:6001",
         "E:": "localhost:6001"
@@ -22,7 +26,7 @@ const MAPS = {
     MSI: MSI,
     HEHUI: HEHUI
 }
-export default MAPS[env]
+export default $.extend(MAPS[env], def)
 
 window.PlayHistory = {
     '2018-02-13': [],
@@ -38,7 +42,3 @@ window.PlayHistory = {
     //     }
     // ]
 }
-
-window.today = moment().format("YYYY-MM-DD")
-
-window.todayHistory = window.PlayHistory[today] = []
