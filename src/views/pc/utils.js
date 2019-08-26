@@ -3,7 +3,7 @@ export function listenEle(elm, events) {
     for (let index = 0; index < events.length; index++) {
       let eventName = events[index];
 
-      elm.addEventListener(eventName, function() {
+      elm.addEventListener(eventName, function () {
         console.log(eventName);
       });
     }
@@ -15,3 +15,12 @@ export function listenEle(elm, events) {
     }
   }
 }
+import config from "./config";
+
+window.getNetUrl = function (v) {
+  var driver = v.substring(0, 2);
+
+  var result = "http://" + config.maps[driver] + v.slice(2);
+
+  return result;
+};

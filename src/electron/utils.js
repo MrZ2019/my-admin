@@ -6,11 +6,13 @@ window.ElectronCallbacks = {
 }
 
 let isConnected = true
+var parent = isConnected ? window.parent : window
+window._p = parent
 window.execute = function (command, params, success) {
 
     try {
         let str = `var params = ${JSON.stringify(params)};var ${command} = ` + COMMANDS[command].toString() + ` ;${command}(params)`
-        var parent = isConnected ? window.parent : window;
+        
 
         parent.postMessage(str, '*')
     } catch (e) {
@@ -34,8 +36,32 @@ window.addEventListener('message', function (e) {
         //       $Mp3List.list = list.slice(0,50) 
         //   } 
         let callback = window.ElectronCallbacks[set.type]
+        
         callback && callback.call(null, set.data)
     } catch (e) {
         alert(e)
     }
 }) 
+
+
+
+
+window.loadData = () => {
+    var str = localStorage.getItem('appData')
+
+    if (str) {
+        window.appData = JSON.parse(str)
+    }else {
+        window.appData = {
+            folderList: []
+        }
+        
+    }
+}
+
+
+window.saveData = () => {
+    localStorage.setItem('appData', JSON.stringify(window.appData))
+}
+
+loadData()

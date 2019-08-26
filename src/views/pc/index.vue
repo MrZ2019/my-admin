@@ -1,8 +1,6 @@
 
 <style lang='scss'>
-    .content {
-        padding: 8px;
-    }
+
 
     .el-table__row {
         user-select: none;
@@ -89,6 +87,8 @@ export default {
 
     window.todayHistory = window.PlayHistory[today] || []
 
+    window.PlayHistory[today] = window.todayHistory 
+
 
     //
 
@@ -151,7 +151,7 @@ export default {
       }
 
       dates.sort(function(a,b) {
-        return a > b
+        return a < b
       })
 
       for (let index = 0; index < dates.length; index++) {

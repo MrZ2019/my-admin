@@ -1,34 +1,56 @@
-
 <style>
-body {
+  body {
     margin: 0;
-}
-iframe {
+  }
+  iframe {
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-}
+  }
 
-video {
-    position:relative;
+  video {
+    position: relative;
     z-index: 100;
-}
+  }
 </style>
-
 
 <iframe src="http://localhost:9527" frameborder="0"></iframe>
 <script src="./utils.js"></script>
 <script>
-    window._require = require
-    window.frame1 = window.frames[0]
-    window.addEventListener('message', function(e) {
-        try {
-            eval(e.data)
-        }catch(e) {
-            alert(e)
-        }
-    })
-</script>
+  window._require = require;
 
+  window.frame1 = window.frames[0];
+  window.addEventListener("message", function(e) {
+    try {
+      eval(e.data);
+    } catch (e) {
+      alert(e);
+    }
+  });
+  window.electron = require("electron");
+  window.Menu = electron.remote.Menu;
+  window.ipcRenderer = electron.ipcRenderer;
+
+
+  var template = [
+    {
+      label: "File1",
+      submenu: [
+        {
+          label: "新建",
+          click() {
+            console.log("new");
+          },
+          accelerator: "Ctrl+Q"
+        }
+      ]
+    }
+  ];
+
+  var menu = Menu.buildFromTemplate(template);
+  window.addEventListener("contextmenu", () => {
+    menu.popup();
+  });
+</script>
