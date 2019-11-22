@@ -1,6 +1,14 @@
 var env = "MSI";
-var env = "HEHUI";
+var env = "MAC";
+window.os = require('os').platform();
+window.isMac = os == "darwin"
+window.isWindows = os == "windows"
 
+if (isMac) {
+  window.SEP = '/'
+} else if(isWindows) {
+  window.SEP = '\\'
+}
 var def = {
   protocal: "http://",
   appKey: "mars-",
@@ -14,18 +22,17 @@ let MSI = {
   },
   folder: "E:\\Video\\网易云\\MV\\"
 };
-let HEHUI = {
+let MAC = {
   protocal: "http://",
   maps: {
-    "D:": "localhost:6001",
-    "C:": "localhost:6001/c"
+    "/zac": "localhost:6001",
   },
-  folder: "D:\\CloudMusic\\MV\\"
+  folder: "/zac/video"
 };
 
 const MAPS = {
   MSI: MSI,
-  HEHUI: HEHUI
+  MAC: MAC
 };
 
 window.mountedMap = {};

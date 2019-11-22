@@ -18,9 +18,18 @@ export function listenEle(elm, events) {
 import config from "./config";
 
 window.getNetUrl = function (v) {
-  var driver = v.substring(0, 2);
+  
 
-  var result = "http://" + config.maps[driver] + v.slice(2);
+  var result;
+
+  if (window.isWindows) {
+    var driver = v.substring(0, 2);
+    result = "http://" + config.maps[driver] + v.slice(2);
+  } else {
+    
+    var root = v.match(/^(\/[^\/]+)/)[1]
+    result = "http://" + config.maps[root] + v.slice(root.length);
+  }
 
   return result;
 };

@@ -93,7 +93,7 @@ export default {
             const element = list[index];
             console.log(element)
 
-            let filepath = options.path + '\\' + element
+            let filepath = options.path + window.SEP + element
             
             let newItem = {
                 name: element,
@@ -130,18 +130,19 @@ export default {
                 let newList = []
                 for (let index = 0; index < list.length; index++) {
                     const element = list[index];
-
                     
                 }
             })
         },
         selectFolder() {
-            var call = function (e) {
-                electron.dialog.showOpenDialog({
+            var call = function () {
+                console.log('test')
+                var res = electron.dialog.showOpenDialog({
                     properties: ["openDirectory"]
-                }, (files) => {
-                    if (files.length) {
-                        event.sender.send("selectedFolder", files[0])
+                })
+                res.then((res)=> {
+                    if (res.filePaths.length) {
+                        event.sender.send("selectedFolder", res.filePaths[0])
                     }
                 })
             }
@@ -200,7 +201,7 @@ export default {
             // debugger
             return (
 <div class="item">
-                <span class="label">{data.label.match(/\\([^\\]+$)/)[1]}</span>
+                <span class="label">{data.label.match(/\/([^\/]+$)/)[1]}</span>
                 <span>
                 <el-button size = "mini" on-click={() => this.deleteFolder(node, data)}>Delete</el-button>
                 </span>
