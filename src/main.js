@@ -14,7 +14,7 @@ import '@/views/pc/style.scss'
 import App from './App'
 import store from './store'
 import router from './router'
-
+    
 import i18n from './lang' // Internationalization
 import './icons' // icon
 import './errorLog' // error log

@@ -150,8 +150,8 @@ export default new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
-export const asyncRouterMap = []
-export const asyncRouterMap2 = [
+export const asyncRouterMap2 = []
+export const asyncRouterMap = [
   {
     path: '/permission',
     component: Layout,

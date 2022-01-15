@@ -28,7 +28,7 @@
     
 
     <div class="toolbar">
-        <el-button type="primary" size="mini" @click="selectFolder">添加目录</el-button>
+        <el-button type="primary" size="mini" @click="selectFolder">添加目录123</el-button>
     </div>
 
     <el-row>
@@ -85,12 +85,14 @@ export default {
     commands: {
         scanDirectory(options) {
         //   let fs = _require("fs");
-
+        window.SEP = '\\'
         //   alert(fs);
         window.utils.scan(options.path, function(list) {
             let newList = []
             for (let index = 0; index < list.length; index++) {
             const element = list[index];
+            console.log(options.path)
+            console.log(window.SEP)
             console.log(element)
 
             let filepath = options.path + window.SEP + element
@@ -135,11 +137,13 @@ export default {
             })
         },
         selectFolder() {
+            console.log('test')
             var call = function () {
                 console.log('test')
                 var res = electron.dialog.showOpenDialog({
                     properties: ["openDirectory"]
-                })
+                });
+                console.log(res)
                 res.then((res)=> {
                     if (res.filePaths.length) {
                         event.sender.send("selectedFolder", res.filePaths[0])
@@ -186,7 +190,10 @@ export default {
             saveData()
         },
         onFolderClick(data, node, tree) {
+            // debugger
             var path = data.path
+
+            console.log(path)
 
             execute("scanDirectory", {
                 path: path
@@ -201,7 +208,7 @@ export default {
             // debugger
             return (
 <div class="item">
-                <span class="label">{data.label.match(/\/([^\/]+$)/)[1]}</span>
+                <span class="label">{data.label.match(/\\([^\\]+$)/)[1]}</span>
                 <span>
                 <el-button size = "mini" on-click={() => this.deleteFolder(node, data)}>Delete</el-button>
                 </span>
@@ -212,6 +219,7 @@ export default {
 
         callbacks: {
             getFolder(data) {
+                // debugger
                 self.folderList.push({
                     id: new Date() - 0,
                     path: data,
